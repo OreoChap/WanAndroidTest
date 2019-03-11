@@ -7,6 +7,9 @@ import com.example.oreooo.wanandroidtest.base.BaseView;
 import com.example.oreooo.wanandroidtest.contract.WanAndroidContract;
 import com.example.oreooo.wanandroidtest.network.ApiService;
 import com.example.oreooo.wanandroidtest.pojo.BannerData;
+import com.example.oreooo.wanandroidtest.pojo.BannerDetailData;
+
+import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -19,11 +22,12 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class WanAndroidPresenter implements WanAndroidContract.Presenter{
     private static final String TAG = "WanAndroidPresenter";
-    String text;
-    BaseView view;
+    private String text;
+    private WanAndroidContract.View view;
+    private List<BannerDetailData> mDate;
 
 
-    public WanAndroidPresenter(BaseView view) {
+    public WanAndroidPresenter(WanAndroidContract.View view) {
         this.view = view;
 
     }
@@ -42,15 +46,15 @@ public class WanAndroidPresenter implements WanAndroidContract.Presenter{
                 .subscribe(new Observer<BannerData>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
+                        Log.d(TAG, "onSubscribe: ");
                     }
 
                     @Override
                     public void onNext(BannerData bannerData) {
-                        try {
-                            text = bannerData.getData().get(0).getTitle();
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        mDate = bannerData.getData();
+                        view.showBanner(mDate);
+                        for (BannerDetailData data : mDate) {
+                            Log.d(TAG, "onNext: " + data.getTitle());
                         }
                     }
 

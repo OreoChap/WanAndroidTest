@@ -1,7 +1,12 @@
 package com.example.oreooo.wanandroidtest.contract;
 
+import android.view.View;
+
 import com.example.oreooo.wanandroidtest.base.BasePresenter;
 import com.example.oreooo.wanandroidtest.base.BaseView;
+import com.example.oreooo.wanandroidtest.pojo.BannerDetailData;
+
+import java.util.List;
 
 /**
  * @author Oreo https://github.com/OreoChap
@@ -16,6 +21,6 @@ public interface WanAndroidContract {
     }
 
     interface View extends BaseView<Presenter> {
-        void setContent();
+        void showBanner(List<BannerDetailData> list);
     }
 }

@@ -17,9 +17,7 @@ public class Network {
         return NetworkHolder.instance;
     }
 
-    private Network(){
-
-    }
+    private Network(){}
 
     private static class NetworkHolder {
         private static Network instance = new Network();

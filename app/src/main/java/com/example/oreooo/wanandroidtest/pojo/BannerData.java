@@ -7,10 +7,9 @@ import java.util.ArrayList;
  * @date 2018/12/19
  */
 public class BannerData {
-
-    ArrayList<BannerDetailData> data;
-    int errorCode;
-    String errorMsg;
+    private ArrayList<BannerDetailData> data;
+    private int errorCode;
+    private String errorMsg;
 
 
     public int getErrorCode() {
