@@ -40,27 +40,15 @@ public class WanAndroidFragment extends Fragment implements WanAndroidContract.V
         View view = inflater
                 .inflate(R.layout.fragment_wanandroid, container, false);
         initView(view);
-        mPresenter.getBanner();
+
         mPresenter = new WanAndroidPresenter(this);
+        mPresenter.getBanner();
         return view;
     }
 
     public void initView(View view) {
         mRecyclerView = view.findViewById(R.id.recycler_wanAndroid);
         mBanner = view.findViewById(R.id.banner_wanAndroid);
-    }
-
-    public void initBanner(List<BannerDetailData> data) {
-        List<String> bannerUrl = new ArrayList<>();
-        for (BannerDetailData item : data) {
-            bannerUrl.add(item.getImagePath());
-        }
-        mBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE)
-                .setImageLoader(new GlideImageLoader())
-                .setImages(bannerUrl)
-                .setBannerAnimation(Transformer.DepthPage)
-                .setDelayTime(1500)
-                .start();
     }
 
     @Override
@@ -74,7 +62,16 @@ public class WanAndroidFragment extends Fragment implements WanAndroidContract.V
     }
 
     @Override
-    public void showBanner(List<BannerDetailData> list) {
-        initBanner(list);
+    public void showBanner(final List<BannerDetailData> list) {
+        List<String> bannerUrl = new ArrayList<>();
+        for (BannerDetailData item : list) {
+            bannerUrl.add(item.getImagePath());
+        }
+        mBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE)
+                .setImageLoader(new GlideImageLoader())
+                .setImages(bannerUrl)
+                .setBannerAnimation(Transformer.DepthPage)
+                .setDelayTime(1500)
+                .start();
     }
 }
