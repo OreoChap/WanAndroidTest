@@ -25,7 +25,6 @@ import java.util.List;
  */
 
 public class WanAndroidFragment extends Fragment implements WanAndroidContract.View{
-
     RecyclerView mRecyclerView;
     WanAndroidContract.Presenter mPresenter;
     Banner mBanner;
@@ -61,6 +60,7 @@ public class WanAndroidFragment extends Fragment implements WanAndroidContract.V
         this.mPresenter = null;
     }
 
+    //todo 添加点击事件
     @Override
     public void showBanner(final List<BannerDetailData> list) {
         List<String> bannerUrl = new ArrayList<>();
@@ -70,7 +70,6 @@ public class WanAndroidFragment extends Fragment implements WanAndroidContract.V
             titles.add(item.getTitle());
         }
 
-
         mBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE)
                 .setImageLoader(new GlideImageLoader())
                 .setImages(bannerUrl)
@@ -78,6 +77,5 @@ public class WanAndroidFragment extends Fragment implements WanAndroidContract.V
                 .setBannerAnimation(Transformer.DepthPage)
                 .setDelayTime(1500)
                 .start();
-
     }
 }

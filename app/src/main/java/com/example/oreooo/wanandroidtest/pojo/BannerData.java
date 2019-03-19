@@ -11,7 +11,6 @@ public class BannerData {
     private int errorCode;
     private String errorMsg;
 
-
     public int getErrorCode() {
         return errorCode;
     }

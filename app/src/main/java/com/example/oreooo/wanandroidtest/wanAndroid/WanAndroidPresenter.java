@@ -26,16 +26,12 @@ public class WanAndroidPresenter implements WanAndroidContract.Presenter{
     private WanAndroidContract.View view;
     private List<BannerDetailData> mDate;
 
-
     public WanAndroidPresenter(WanAndroidContract.View view) {
         this.view = view;
-
     }
 
     @Override
-    public void getArticles() {
-
-    }
+    public void getArticles() {}
 
     @Override
     public void getBanner() {

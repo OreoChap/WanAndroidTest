@@ -4,13 +4,11 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
-
 /**
  * @author Oreo https://github.com/OreoChap
  * @date 2018/12/20
  */
 public class Network {
-
     private Retrofit mRetrofit;
 
     public static Network getInstance() {
