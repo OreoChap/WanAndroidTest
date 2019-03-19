@@ -64,14 +64,20 @@ public class WanAndroidFragment extends Fragment implements WanAndroidContract.V
     @Override
     public void showBanner(final List<BannerDetailData> list) {
         List<String> bannerUrl = new ArrayList<>();
+        List<String> titles = new ArrayList<>();
         for (BannerDetailData item : list) {
             bannerUrl.add(item.getImagePath());
+            titles.add(item.getTitle());
         }
+
+
         mBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE)
                 .setImageLoader(new GlideImageLoader())
                 .setImages(bannerUrl)
+                .setBannerTitles(titles)
                 .setBannerAnimation(Transformer.DepthPage)
                 .setDelayTime(1500)
                 .start();
+
     }
 }

@@ -53,9 +53,7 @@ public class WanAndroidPresenter implements WanAndroidContract.Presenter{
                     public void onNext(BannerData bannerData) {
                         mDate = bannerData.getData();
                         view.showBanner(mDate);
-                        for (BannerDetailData data : mDate) {
-                            Log.d(TAG, "onNext: " + data.getTitle());
-                        }
+                        Log.d(TAG, "onNext: " + mDate.toString());
                     }
 
                     @Override
@@ -68,7 +66,6 @@ public class WanAndroidPresenter implements WanAndroidContract.Presenter{
                         Log.d(TAG, "onComplete: called");
                     }
                 });
-
     }
 
     @Override
