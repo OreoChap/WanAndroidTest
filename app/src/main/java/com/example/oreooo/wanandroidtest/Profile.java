@@ -1,4 +1,4 @@
-package com.example.oreooo.wanandroidtest.network;
+package com.example.oreooo.wanandroidtest;
 
 /**
  * @author Oreo https://github.com/OreoChap

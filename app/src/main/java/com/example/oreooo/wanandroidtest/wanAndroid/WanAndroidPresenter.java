@@ -2,12 +2,12 @@ package com.example.oreooo.wanandroidtest.wanAndroid;
 
 import android.util.Log;
 
-import com.example.oreooo.wanandroidtest.BannerService;
-import com.example.oreooo.wanandroidtest.base.BaseView;
-import com.example.oreooo.wanandroidtest.contract.WanAndroidContract;
-import com.example.oreooo.wanandroidtest.network.ApiService;
+import com.example.oreooo.wanandroidtest.network.Service.WanAndroidService;
+import com.example.oreooo.wanandroidtest.network.Api;
+import com.example.oreooo.wanandroidtest.pojo.Article;
 import com.example.oreooo.wanandroidtest.pojo.BannerData;
 import com.example.oreooo.wanandroidtest.pojo.BannerDetailData;
+import com.oreooo.library.MvpBase.BaseContract;
 
 import java.util.List;
 
@@ -22,33 +22,39 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class WanAndroidPresenter implements WanAndroidContract.Presenter{
     private static final String TAG = "WanAndroidPresenter";
-    private String text;
-    private WanAndroidContract.View view;
+    private WanAndroidContract.View mView;
     private List<BannerDetailData> mDate;
 
-    public WanAndroidPresenter(WanAndroidContract.View view) {
-        this.view = view;
+    public static WanAndroidPresenter getInstance() {
+        return WanAndroidPresenterHolder.Instance;
     }
 
-    @Override
-    public void getArticles() {}
+    private static class  WanAndroidPresenterHolder {
+        private static WanAndroidPresenter Instance = new WanAndroidPresenter();
+    }
+
+    WanAndroidPresenter(){}
 
     @Override
-    public void getBanner() {
-        BannerService service = ApiService.createBannerService();
-        service.getBanner()
+    public void setView(BaseContract.BaseView view) {
+        this.mView = (WanAndroidContract.View)view;
+    }
+
+
+    @Override
+    public void getArticles(String curPage) {
+        Api.createBannerService().getArticle(curPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<BannerData>() {
+                .subscribe(new Observer<Article>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         Log.d(TAG, "onSubscribe: ");
                     }
 
                     @Override
-                    public void onNext(BannerData bannerData) {
-                        mDate = bannerData.getData();
-                        view.showBanner(mDate);
+                    public void onNext(Article data) {
+                        mView.showArticle(data);
                         Log.d(TAG, "onNext: " + mDate.toString());
                     }
 
@@ -65,7 +71,33 @@ public class WanAndroidPresenter implements WanAndroidContract.Presenter{
     }
 
     @Override
-    public void setView() {
+    public void getBanner() {
+        Api.createBannerService().getBanner()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<BannerData>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        Log.d(TAG, "getBanner: 发起请求");
+                    }
 
+                    @Override
+                    public void onNext(BannerData bannerData) {
+                        mDate = bannerData.getData();
+                        mView.showBanner(mDate);
+                        Log.d(TAG, "getBanner: 请求回调");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "getBanner: 请求失败");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "getBanner: 请求完结");
+                    }
+                });
     }
+
 }

@@ -1,21 +1,23 @@
 package com.example.oreooo.wanandroidtest.wanAndroid;
 
-
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import android.text.Html;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.oreooo.wanandroidtest.GlideImageLoader;
 import com.example.oreooo.wanandroidtest.R;
-import com.example.oreooo.wanandroidtest.contract.WanAndroidContract;
+import com.example.oreooo.wanandroidtest.pojo.Article;
+import com.example.oreooo.wanandroidtest.pojo.ArticleDatas;
 import com.example.oreooo.wanandroidtest.pojo.BannerDetailData;
+import com.oreooo.library.ListBase.BaseRecyclerAdapter;
+import com.oreooo.library.ListBase.BaseViewHolder;
+import com.oreooo.library.MvpBase.BaseFragment;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,40 +26,48 @@ import java.util.List;
  * @date 2018/12/13
  */
 
-public class WanAndroidFragment extends Fragment implements WanAndroidContract.View{
+public class WanAndroidFragment extends BaseFragment implements WanAndroidContract.View{
+
+    public static WanAndroidFragment wanAndroidFragment;
     RecyclerView mRecyclerView;
     WanAndroidContract.Presenter mPresenter;
     Banner mBanner;
 
-    public static WanAndroidFragment newInstance() {
-        return new WanAndroidFragment();
+    public static WanAndroidFragment getInstance() {
+        if (wanAndroidFragment == null) {
+            synchronized (WanAndroidFragment.class) {
+                if (wanAndroidFragment == null) {
+                    wanAndroidFragment = new WanAndroidFragment();
+                }
+            }
+        }
+        return wanAndroidFragment;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater
-                .inflate(R.layout.fragment_wanandroid, container, false);
-        initView(view);
-
-        mPresenter = new WanAndroidPresenter(this);
-        mPresenter.getBanner();
-        return view;
-    }
-
     public void initView(View view) {
         mRecyclerView = view.findViewById(R.id.recycler_wanAndroid);
         mBanner = view.findViewById(R.id.banner_wanAndroid);
     }
 
     @Override
-    public void subscribe(WanAndroidContract.Presenter presenter) {
-        this.mPresenter = presenter;
+    public void initListener() {
+
     }
 
     @Override
-    public void unSubscribe() {
-        this.mPresenter = null;
+    public void showArticle(Article data) {
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(new BaseRecyclerAdapter<ArticleDatas>(getActivity(),
+                data.getData().getDatas(), R.layout.list_item_article, null) {
+            @Override
+            public void bindHolder(BaseViewHolder holder, ArticleDatas item) {
+                ((TextView)holder.getView(R.id.txt_article_name)).setText((Html.fromHtml("《" + item.getTitle() +"》")));
+                ((TextView)holder.getView(R.id.txt_article_author)).setText(String.valueOf("作者：" + item.getAuthor()));
+                ((TextView)holder.getView(R.id.txt_article_super_chapter_name)).setText(item.getSuperChapterName());
+            }
+        });
+
     }
 
     //todo 添加点击事件
@@ -78,4 +88,35 @@ public class WanAndroidFragment extends Fragment implements WanAndroidContract.V
                 .setDelayTime(1500)
                 .start();
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        subscribe();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        unsubscribe();
+    }
+
+    @Override
+    public int setContentView() {
+        return R.layout.fragment_wanandroid;
+    }
+
+    @Override
+    public void subscribe() {
+        this.mPresenter = WanAndroidPresenter.getInstance();
+        mPresenter.setView(this);
+        mPresenter.getBanner();
+        mPresenter.getArticles("0");
+    }
+
+    @Override
+    public void unsubscribe() {
+        this.mPresenter = null;
+    }
+
 }
