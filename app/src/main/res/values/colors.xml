@@ -4,4 +4,11 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorGray">#999999</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorOrange">#ef8328</color>
+    <color name="colorBlue"> #3c9cff</color>
+    <color name="WhiteSmoke">#F5F5F5</color>
+    <color name="Gainsboro">#DCDCDC</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="color_list_background">#F7F9FC</color>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.oreooo.wanandroidtest.network;
 
+import com.alibaba.fastjson.support.retrofit.Retrofit2ConverterFactory;
 import com.example.oreooo.wanandroidtest.Profile;
 
 import retrofit2.Retrofit;
@@ -28,7 +29,7 @@ public class Network {
         mRetrofit = new Retrofit.Builder()
                 .baseUrl(Profile.API_BASE)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(JacksonConverterFactory.create())
+                .addConverterFactory(Retrofit2ConverterFactory.create())
                 .build();
         }
         return mRetrofit;

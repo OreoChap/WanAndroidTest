@@ -62,9 +62,16 @@ public class WanAndroidFragment extends BaseFragment implements WanAndroidContra
                 data.getData().getDatas(), R.layout.list_item_article, null) {
             @Override
             public void bindHolder(BaseViewHolder holder, ArticleDatas item) {
-                ((TextView)holder.getView(R.id.txt_article_name)).setText((Html.fromHtml("《" + item.getTitle() +"》")));
-                ((TextView)holder.getView(R.id.txt_article_author)).setText(String.valueOf("作者：" + item.getAuthor()));
-                ((TextView)holder.getView(R.id.txt_article_super_chapter_name)).setText(item.getSuperChapterName());
+                ((TextView)holder.getView(R.id.txt_article_name))
+                        .setText((Html.fromHtml("《" + item.getTitle() +"》")));
+                ((TextView)holder.getView(R.id.txt_article_super_chapter_name))
+                        .setText(String.valueOf(item.getSuperChapterName().trim()));
+                ((TextView)holder.getView(R.id.txt_article_author))
+                        .setText(String.valueOf(item.getAuthor().trim()));
+                ((TextView)holder.getView(R.id.txt_article_nice_date))
+                        .setText(Html.fromHtml("<font color='#008577'>" + "发布时间：" +
+                                "</font>" +
+                                item.getNiceDate()));
             }
         });
 
