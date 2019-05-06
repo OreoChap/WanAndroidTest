@@ -2,8 +2,11 @@ package com.example.oreooo.wanandroidtest.pojo;
 
 import java.util.List;
 
+/**
+ * @author Oreo https://github.com/OreoChap
+ * @date 2019/4/29
+ */
 public class ArticleDatas {
-
     private String apkLink;
     private String author;
     private String chapterId;

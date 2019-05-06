@@ -5,7 +5,6 @@ package com.example.oreooo.wanandroidtest.pojo;
  * @date 2018/12/19
  */
 public class BannerDetailData {
-
     private String desc;
     private int id;
     private String imagePath;

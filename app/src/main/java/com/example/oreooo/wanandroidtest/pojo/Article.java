@@ -1,7 +1,10 @@
 package com.example.oreooo.wanandroidtest.pojo;
 
+/**
+ * @author Oreo https://github.com/OreoChap
+ * @date 2019/4/29
+ */
 public class Article {
-
     private ArticleData data;
     private String errorCode;
     private String errorMsg;

@@ -1,19 +1,12 @@
 package com.example.oreooo.wanandroidtest.wanAndroid;
 
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.View;
-import android.widget.TextView;
-
 import com.example.oreooo.wanandroidtest.GlideImageLoader;
 import com.example.oreooo.wanandroidtest.R;
 import com.example.oreooo.wanandroidtest.pojo.Article;
-import com.example.oreooo.wanandroidtest.pojo.ArticleDatas;
 import com.example.oreooo.wanandroidtest.pojo.BannerDetailData;
-import com.oreooo.library.ListBase.BaseRecyclerAdapter;
-import com.oreooo.library.ListBase.BaseViewHolder;
 import com.oreooo.library.MvpBase.BaseFragment;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -58,23 +51,8 @@ public class WanAndroidFragment extends BaseFragment implements WanAndroidContra
     @Override
     public void showArticle(Article data) {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(new BaseRecyclerAdapter<ArticleDatas>(getActivity(),
-                data.getData().getDatas(), R.layout.list_item_article, null) {
-            @Override
-            public void bindHolder(BaseViewHolder holder, ArticleDatas item) {
-                ((TextView)holder.getView(R.id.txt_article_name))
-                        .setText((Html.fromHtml("《" + item.getTitle() +"》")));
-                ((TextView)holder.getView(R.id.txt_article_super_chapter_name))
-                        .setText(String.valueOf(item.getSuperChapterName().trim()));
-                ((TextView)holder.getView(R.id.txt_article_author))
-                        .setText(String.valueOf(item.getAuthor().trim()));
-                ((TextView)holder.getView(R.id.txt_article_nice_date))
-                        .setText(Html.fromHtml("<font color='#008577'>" + "发布时间：" +
-                                "</font>" +
-                                item.getNiceDate()));
-            }
-        });
-
+        mRecyclerView.setAdapter(new WanAndroidAdapter(getActivity(),
+                data.getData().getDatas(), R.layout.list_item_article, null));
     }
 
     //todo 添加点击事件
