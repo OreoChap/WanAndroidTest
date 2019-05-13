@@ -6,6 +6,7 @@ import android.text.Html;
 import android.widget.TextView;
 import com.example.oreooo.wanandroidtest.R;
 import com.example.oreooo.wanandroidtest.pojo.ArticleDatas;
+import com.example.oreooo.wanandroidtest.test.TRecyclerViewAdapter;
 import com.oreooo.library.ListBase.BaseRecyclerAdapter;
 import com.oreooo.library.ListBase.BaseViewHolder;
 import java.util.List;
@@ -14,14 +15,14 @@ import java.util.List;
  * @author Oreo https://github.com/OreoChap
  * @date 2019/5/4
  */
-public class WanAndroidAdapter extends BaseRecyclerAdapter<ArticleDatas> {
+public class WanAndroidAdapter extends TRecyclerViewAdapter<ArticleDatas> {
 
     public WanAndroidAdapter(Context context, List<ArticleDatas> list, int layoutId, @Nullable OnViewHolderClickListener listener) {
         super(context, list, layoutId, listener);
     }
 
     @Override
-    public void bindHolder(BaseViewHolder holder, ArticleDatas item) {
+    protected void bindHolder(TRecyclerViewAdapter.ViewHolder holder, ArticleDatas item) {
         ((TextView)holder.getView(R.id.txt_article_name))
                 .setText((Html.fromHtml("《" + item.getTitle() +"》")));
         ((TextView)holder.getView(R.id.txt_article_super_chapter_name))

@@ -22,8 +22,11 @@ import java.util.List;
 public class WanAndroidFragment extends BaseFragment implements WanAndroidContract.View{
 
     public static WanAndroidFragment wanAndroidFragment;
-    RecyclerView mRecyclerView;
     WanAndroidContract.Presenter mPresenter;
+    WanAndroidAdapter mAdapter;
+
+    // 控件
+    RecyclerView mRecyclerView;
     Banner mBanner;
 
     public static WanAndroidFragment getInstance() {
@@ -51,8 +54,9 @@ public class WanAndroidFragment extends BaseFragment implements WanAndroidContra
     @Override
     public void showArticle(Article data) {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(new WanAndroidAdapter(getActivity(),
-                data.getData().getDatas(), R.layout.list_item_article, null));
+        mAdapter = new WanAndroidAdapter(getActivity(),
+                data.getData().getDatas(), R.layout.list_item_article, null);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     //todo 添加点击事件
