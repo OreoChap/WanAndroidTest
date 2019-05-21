@@ -20,14 +20,9 @@ import java.util.List;
  */
 
 public class WanAndroidFragment extends BaseFragment implements WanAndroidContract.View{
-
     public static WanAndroidFragment wanAndroidFragment;
     WanAndroidContract.Presenter mPresenter;
     WanAndroidAdapter mAdapter;
-
-    // 控件
-    RecyclerView mRecyclerView;
-    Banner mBanner;
 
     public static WanAndroidFragment getInstance() {
         if (wanAndroidFragment == null) {
@@ -41,41 +36,42 @@ public class WanAndroidFragment extends BaseFragment implements WanAndroidContra
     }
 
     @Override
-    public void initView(View view) {
-        mRecyclerView = view.findViewById(R.id.recycler_wanAndroid);
-        mBanner = view.findViewById(R.id.banner_wanAndroid);
-    }
+    public void initView(View view) { }
 
     @Override
-    public void initListener() {
-
-    }
+    public void initListener() { }
 
     @Override
     public void showArticle(Article data) {
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new WanAndroidAdapter(getActivity(),
-                data.getData().getDatas(), R.layout.list_item_article, null);
-        mRecyclerView.setAdapter(mAdapter);
+        if (wanAndroidFragment.getView() != null) {
+            RecyclerView mRecyclerView = wanAndroidFragment.getView().findViewById(R.id.recycler_wanAndroid);
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mAdapter = new WanAndroidAdapter(getActivity(),
+                    data.getData().getDatas(), R.layout.list_item_article, null);
+            mRecyclerView.setAdapter(mAdapter);
+        }
     }
 
     //todo 添加点击事件
     @Override
     public void showBanner(final List<BannerDetailData> list) {
-        List<String> bannerUrl = new ArrayList<>();
-        List<String> titles = new ArrayList<>();
-        for (BannerDetailData item : list) {
-            bannerUrl.add(item.getImagePath());
-            titles.add(item.getTitle());
-        }
+        if (wanAndroidFragment.getView() != null) {
+            Banner mBanner = wanAndroidFragment.getView().findViewById(R.id.banner_wanAndroid);
+            List<String> bannerUrl = new ArrayList<>();
+            List<String> titles = new ArrayList<>();
+            for (BannerDetailData item : list) {
+                bannerUrl.add(item.getImagePath());
+                titles.add(item.getTitle());
+            }
 
-        mBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE)
-                .setImageLoader(new GlideImageLoader())
-                .setImages(bannerUrl)
-                .setBannerTitles(titles)
-                .setBannerAnimation(Transformer.DepthPage)
-                .setDelayTime(1500)
-                .start();
+            mBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE)
+                    .setImageLoader(new GlideImageLoader())
+                    .setImages(bannerUrl)
+                    .setBannerTitles(titles)
+                    .setBannerAnimation(Transformer.DepthPage)
+                    .setDelayTime(1500)
+                    .start();
+        }
     }
 
     @Override
@@ -107,5 +103,4 @@ public class WanAndroidFragment extends BaseFragment implements WanAndroidContra
     public void unsubscribe() {
         this.mPresenter = null;
     }
-
 }
