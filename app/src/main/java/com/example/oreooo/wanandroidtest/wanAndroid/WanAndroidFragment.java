@@ -1,8 +1,11 @@
 package com.example.oreooo.wanandroidtest.wanAndroid;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
+
 import com.example.oreooo.wanandroidtest.GlideImageLoader;
 import com.example.oreooo.wanandroidtest.R;
 import com.example.oreooo.wanandroidtest.pojo.Article;
@@ -49,6 +52,14 @@ public class WanAndroidFragment extends BaseFragment implements WanAndroidContra
             mAdapter = new WanAndroidAdapter(getActivity(),
                     data.getData().getDatas(), R.layout.list_item_article, null);
             mRecyclerView.setAdapter(mAdapter);
+
+            SwipeRefreshLayout refreshLayout = wanAndroidFragment.getView().findViewById(R.id.refresh_layout);
+            refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    Toast.makeText(getActivity(), "正在尝试下拉刷新！", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 
