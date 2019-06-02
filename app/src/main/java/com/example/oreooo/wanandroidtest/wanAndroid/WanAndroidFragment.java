@@ -11,6 +11,9 @@ import com.example.oreooo.wanandroidtest.R;
 import com.example.oreooo.wanandroidtest.pojo.Article;
 import com.example.oreooo.wanandroidtest.pojo.BannerDetailData;
 import com.oreooo.library.MvpBase.BaseFragment;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -26,6 +29,7 @@ public class WanAndroidFragment extends BaseFragment implements WanAndroidContra
     public static WanAndroidFragment wanAndroidFragment;
     WanAndroidContract.Presenter mPresenter;
     WanAndroidAdapter mAdapter;
+    int ArticlePage = 0;
 
     public static WanAndroidFragment getInstance() {
         if (wanAndroidFragment == null) {
@@ -39,7 +43,28 @@ public class WanAndroidFragment extends BaseFragment implements WanAndroidContra
     }
 
     @Override
-    public void initView(View view) { }
+    public void initView(View view) {
+        RefreshLayout refreshLayout = view.findViewById(R.id.layout_refresh);
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                mPresenter.getArticles(String.valueOf(ArticlePage));
+                refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
+            }
+        });
+        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(RefreshLayout refreshlayout) {
+                ++ArticlePage;
+                if (mAdapter.getItemCount() <= 20 * ArticlePage) {
+                    mPresenter.getArticles(String.valueOf(ArticlePage));
+                } else {
+                    --ArticlePage;
+                }
+                refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
+            }
+        });
+    }
 
     @Override
     public void initListener() { }
@@ -49,17 +74,14 @@ public class WanAndroidFragment extends BaseFragment implements WanAndroidContra
         if (wanAndroidFragment.getView() != null) {
             RecyclerView mRecyclerView = wanAndroidFragment.getView().findViewById(R.id.recycler_wanAndroid);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            mAdapter = new WanAndroidAdapter(getActivity(),
-                    data.getData().getDatas(), R.layout.list_item_article, null);
-            mRecyclerView.setAdapter(mAdapter);
-
-            SwipeRefreshLayout refreshLayout = wanAndroidFragment.getView().findViewById(R.id.refresh_layout);
-            refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    Toast.makeText(getActivity(), "正在尝试下拉刷新！", Toast.LENGTH_SHORT).show();
-                }
-            });
+            if (mAdapter == null) {
+                mAdapter = new WanAndroidAdapter(getActivity(),
+                        data.getData().getDatas(), R.layout.list_item_article, null);
+                mRecyclerView.setAdapter(mAdapter);
+            } else if (mAdapter.getItemCount() <= 20 * ArticlePage){
+                mAdapter.addData(data.getData().getDatas());
+                mAdapter.notifyDataSetChanged();
+            }
         }
     }
 

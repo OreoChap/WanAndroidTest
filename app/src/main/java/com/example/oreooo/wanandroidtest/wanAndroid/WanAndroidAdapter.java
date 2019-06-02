@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.text.Html;
 import android.widget.TextView;
 import com.example.oreooo.wanandroidtest.R;
+import com.example.oreooo.wanandroidtest.pojo.ArticleData;
 import com.example.oreooo.wanandroidtest.pojo.ArticleDatas;
 import com.example.oreooo.wanandroidtest.test.TRecyclerViewAdapter;
 import com.oreooo.library.ListBase.BaseRecyclerAdapter;
@@ -17,8 +18,12 @@ import java.util.List;
  */
 public class WanAndroidAdapter extends TRecyclerViewAdapter<ArticleDatas> {
 
-    public WanAndroidAdapter(Context context, List<ArticleDatas> list, int layoutId, @Nullable OnViewHolderClickListener listener) {
+    private List<ArticleDatas> mData;
+
+    public WanAndroidAdapter(Context context, List<ArticleDatas> list,
+                             int layoutId, @Nullable OnViewHolderClickListener listener) {
         super(context, list, layoutId, listener);
+        mData = list;
     }
 
     @Override
@@ -33,5 +38,9 @@ public class WanAndroidAdapter extends TRecyclerViewAdapter<ArticleDatas> {
                 .setText(Html.fromHtml("<font color='#008577'>" + "发布时间：" +
                         "</font>" +
                         item.getNiceDate()));
+    }
+
+    public void addData(List<ArticleDatas> list) {
+        mData.addAll(list);
     }
 }
