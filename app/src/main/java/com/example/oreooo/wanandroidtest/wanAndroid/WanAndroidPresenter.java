@@ -42,7 +42,7 @@ public class WanAndroidPresenter implements WanAndroidContract.Presenter{
 
 
     @Override
-    public void getArticles(String curPage) {
+    public void getArticles(String curPage, final boolean isUpdate) {
         Api.createBannerService().getArticle(curPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -54,7 +54,7 @@ public class WanAndroidPresenter implements WanAndroidContract.Presenter{
 
                     @Override
                     public void onNext(Article data) {
-                        mView.showArticle(data);
+                        mView.showArticle(data, isUpdate);
                         Log.d(TAG, "onNext: " + mDate.toString());
                     }
 

@@ -1,5 +1,6 @@
 package com.example.oreooo.wanandroidtest.wanAndroid;
 
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +11,8 @@ import com.example.oreooo.wanandroidtest.GlideImageLoader;
 import com.example.oreooo.wanandroidtest.R;
 import com.example.oreooo.wanandroidtest.pojo.Article;
 import com.example.oreooo.wanandroidtest.pojo.BannerDetailData;
+import com.example.oreooo.wanandroidtest.test.TRecyclerViewAdapter;
+import com.example.oreooo.wanandroidtest.wanAndroid.webView.WebViewActivity;
 import com.oreooo.library.MvpBase.BaseFragment;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -17,6 +20,8 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
+import com.youth.banner.listener.OnBannerListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +53,7 @@ public class WanAndroidFragment extends BaseFragment implements WanAndroidContra
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
-                mPresenter.getArticles(String.valueOf(ArticlePage));
+                mPresenter.getArticles(String.valueOf(ArticlePage), true);
                 refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
             }
         });
@@ -57,7 +62,7 @@ public class WanAndroidFragment extends BaseFragment implements WanAndroidContra
             public void onLoadMore(RefreshLayout refreshlayout) {
                 ++ArticlePage;
                 if (mAdapter.getItemCount() <= 20 * ArticlePage) {
-                    mPresenter.getArticles(String.valueOf(ArticlePage));
+                    mPresenter.getArticles(String.valueOf(ArticlePage), false);
                 } else {
                     --ArticlePage;
                 }
@@ -70,17 +75,30 @@ public class WanAndroidFragment extends BaseFragment implements WanAndroidContra
     public void initListener() { }
 
     @Override
-    public void showArticle(Article data) {
+    public void showArticle(final Article data, boolean isUpdate) {
         if (wanAndroidFragment.getView() != null) {
             RecyclerView mRecyclerView = wanAndroidFragment.getView().findViewById(R.id.recycler_wanAndroid);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            if (mAdapter == null) {
+
+            if (mAdapter == null || isUpdate) {
                 mAdapter = new WanAndroidAdapter(getActivity(),
-                        data.getData().getDatas(), R.layout.list_item_article, null);
+                        data.getData().getDatas(), R.layout.list_item_article, new TRecyclerViewAdapter.OnViewHolderClickListener() {
+                    @Override
+                    public void onClick(int position) {
+                        Intent i = new Intent(getActivity(), WebViewActivity.class);
+                        i.putExtra("webUrl", mAdapter.mData.get(position).getLink());
+                        startActivity(i);
+                    }
+                });
                 mRecyclerView.setAdapter(mAdapter);
-            } else if (mAdapter.getItemCount() <= 20 * ArticlePage){
-                mAdapter.addData(data.getData().getDatas());
-                mAdapter.notifyDataSetChanged();
+                ArticlePage = 0;
+            }
+
+            if (mAdapter != null) {
+                if (mAdapter.getItemCount() <= 20 * ArticlePage){
+                    mAdapter.addData(data.getData().getDatas());
+                    mAdapter.notifyItemChanged(mAdapter.mData.size());
+                }
             }
         }
     }
@@ -101,6 +119,14 @@ public class WanAndroidFragment extends BaseFragment implements WanAndroidContra
                     .setImageLoader(new GlideImageLoader())
                     .setImages(bannerUrl)
                     .setBannerTitles(titles)
+                    .setOnBannerListener(new OnBannerListener() {
+                        @Override
+                        public void OnBannerClick(int position) {
+                            Intent i = new Intent(getActivity(), WebViewActivity.class);
+                            i.putExtra("webUrl", list.get(position).getUrl());
+                            startActivity(i);
+                        }
+                    })
                     .setBannerAnimation(Transformer.DepthPage)
                     .setDelayTime(1500)
                     .start();
@@ -129,7 +155,7 @@ public class WanAndroidFragment extends BaseFragment implements WanAndroidContra
         this.mPresenter = WanAndroidPresenter.getInstance();
         mPresenter.setView(this);
         mPresenter.getBanner();
-        mPresenter.getArticles("0");
+        mPresenter.getArticles("0", true);
     }
 
     @Override
