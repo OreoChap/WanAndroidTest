@@ -11,9 +11,13 @@ import com.oreooo.library.MvpBase.BaseContract;
 
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -43,13 +47,13 @@ public class WanAndroidPresenter implements WanAndroidContract.Presenter{
 
     @Override
     public void getArticles(String curPage, final boolean isUpdate) {
-        Api.createBannerService().getArticle(curPage)
+        Api.createWanAndroidService().getArticle(curPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Article>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        Log.d(TAG, "onSubscribe: ");
+                        Log.d(TAG, "onSubscribe: called");
                     }
 
                     @Override
@@ -72,7 +76,7 @@ public class WanAndroidPresenter implements WanAndroidContract.Presenter{
 
     @Override
     public void getBanner() {
-        Api.createBannerService().getBanner()
+        Api.createWanAndroidService().getBanner()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<BannerData>() {
