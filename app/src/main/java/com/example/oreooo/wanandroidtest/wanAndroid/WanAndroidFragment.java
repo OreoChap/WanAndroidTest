@@ -102,7 +102,6 @@ public class WanAndroidFragment extends BaseFragment implements WanAndroidContra
         }
     }
 
-    //todo 添加点击事件
     @Override
     public void showBanner(final List<BannerDetailData> list) {
         if (wanAndroidFragment.getView() != null) {
