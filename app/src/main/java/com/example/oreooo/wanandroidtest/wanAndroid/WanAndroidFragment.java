@@ -77,10 +77,9 @@ public class WanAndroidFragment extends BaseFragment implements WanAndroidContra
     @Override
     public void showArticle(final Article data, boolean isUpdate) {
         if (wanAndroidFragment.getView() != null) {
-            RecyclerView mRecyclerView = wanAndroidFragment.getView().findViewById(R.id.recycler_wanAndroid);
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
             if (mAdapter == null || isUpdate) {
+                RecyclerView mRecyclerView = wanAndroidFragment.getView().findViewById(R.id.recycler_wanAndroid);
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 mAdapter = new WanAndroidAdapter(getActivity(),
                         data.getData().getDatas(), R.layout.list_item_article, new TRecyclerViewAdapter.OnViewHolderClickListener() {
                     @Override
