@@ -152,8 +152,10 @@ public class WanAndroidFragment extends BaseFragment implements WanAndroidContra
     public void subscribe() {
         this.mPresenter = WanAndroidPresenter.getInstance();
         mPresenter.setView(this);
-        mPresenter.getBanner();
-        mPresenter.getArticles("0", true);
+        if (mAdapter == null) {
+            mPresenter.getBanner();
+            mPresenter.getArticles("0", true);
+        }
     }
 
     @Override
